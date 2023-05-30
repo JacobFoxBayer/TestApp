@@ -44,7 +44,6 @@ const Table = () => {
             if (fetchResult.ok) {
                 console.log('Get request received')
                 const jsonData = await fetchResult.json()
-                console.log(jsonData)
                 setData(jsonData.data.getData)
             }
             else
@@ -54,6 +53,36 @@ const Table = () => {
         makeCall()
 
     }, [])
+
+    const addDog = async (newData) => {
+        const fetchResult = await fetch('/test/v1/graphql', { method: 'POST', headers: {'Content-Type': 'application/json',}, body: JSON.stringify({
+            query: `
+                mutation muchacho($name: String!, $breed: String!, $age: Int!) {
+                addDog(input: {name: $name, breed: $breed, age: $age}) {
+                    dogId
+                    name
+                    breed
+                    age
+                  }
+                }
+              `,
+
+              variables: {
+                name: newData.name,
+                age: newData.age,
+                breed: newData.breed,
+              },
+            })})
+            console.log(fetchResult)
+            if(fetchResult.ok) {
+                const resultJson = await fetchResult.json()
+                setData([...data, resultJson.data.addDog])
+                setAddRowModalDisplayed(false)
+            }
+            else {
+                console.log('Error fetching new data')
+            }
+    }
 
 
     return (
@@ -89,8 +118,8 @@ const Table = () => {
                 </tbody>
             </table>
             <button onClick={ () => setAddRowModalDisplayed(true) }>Add a row</button>
-            { addRowModalDisplayed && //I've come to understand that this functions as basically an if statement for html. Is that accurate?
-                <AddRowModal hideModal={ () => setAddRowModalDisplayed(false) } />
+            { addRowModalDisplayed &&
+                <AddRowModal hideModal={ () => setAddRowModalDisplayed(false) } newDog={ (newData) => addDog(newData) } />
             }
         </div>
     )

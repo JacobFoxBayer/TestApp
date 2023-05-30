@@ -16,5 +16,5 @@ type Query {
 }
 
 type Mutation {
-  changeData(input: DogInput): [Dog]
+  addDog(input: DogInput): Dog
 }

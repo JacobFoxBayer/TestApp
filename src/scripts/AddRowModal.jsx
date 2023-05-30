@@ -8,9 +8,10 @@ const AddRowModal = (props) => {
         age: '',
     })
 
+
+
     return (
         <div>
-            <form>
                 <div className='formField'>
                     <label>Name: </label>
                     <input type="text" name='name' value={ newDogData.name || ''} onChange={ (e) => setNewDogData({...newDogData, name: e.target.value}) }/>
@@ -21,13 +22,13 @@ const AddRowModal = (props) => {
                 </div>
                 <div className='formField'>
                     <label>Age: </label>
-                    <input type="text" name='age' value={ newDogData.age || ''} onChange={ (e) => setNewDogData({...newDogData, age: e.target.value}) }/>
+                    <input type="text" name='age' value={ newDogData.age || ''} onChange={ (e) => setNewDogData({...newDogData, age: Number(e.target.value)}) }/>
                 </div>
                 <div className='formField'>
-                    <button disabled={ newDogData.name == '' || newDogData.breed == '' || newDogData.age == '' }>Enter</button>
+                    <button disabled={ newDogData.name == '' || newDogData.breed == '' || newDogData.age == '' } 
+                    onClick={() => props.newDog(newDogData) }>Enter</button>
                 </div>
-            </form>
-            <button onClick={ props.hideModal }>Cancel</button> 
+            <button onClick={ props.hideModal /*Why does this break when made into an anonymous function?*/}>Cancel</button> 
         </div>
     )
 }
