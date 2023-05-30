@@ -1,0 +1,12 @@
+[{
+  "route": "localhost/test",
+  "hosts": ["http://localhost:3378"],
+  "require-auth": true,
+  "user-header": "user-id",
+  "client-header": "client-id",
+  "cookie-name": "test_local",
+  "auth-provider":"AzureAD",
+  "client-id": "vault://secret/vault-path/YOURCLIENTID",
+  "client-secret": "vault://secret/vault-path/YOURCLIENTSECRET",
+  "user-profile-enabled": false
+}]

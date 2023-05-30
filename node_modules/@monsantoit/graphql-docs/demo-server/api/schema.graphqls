@@ -1,0 +1,16 @@
+type Data {
+    result: String
+    now: String
+}
+
+input DataInput {
+    result: String
+}
+
+type Query {
+    getData: Data
+}
+
+type Mutation {
+    changeData(input: DataInput): Data
+}

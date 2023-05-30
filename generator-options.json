@@ -1,0 +1,15 @@
+{
+  "projectName": "test",
+  "localPort": "3378",
+  "projectType": "both",
+  "productId": "test",
+  "contextRoot": "test",
+  "suite": "velocity",
+  "redux": "n",
+  "elementIntegration": "y",
+  "elementTheme": "velocity",
+  "elementMaterialIcons": "n",
+  "vault": "n",
+  "paramStore": "n",
+  "apiType": "graphql"
+}
