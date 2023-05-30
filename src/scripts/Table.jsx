@@ -19,6 +19,8 @@ Left to do (off the top of my head):
 
     * Tests (?) and exception handling
 
+    * Add typescript drivers and convert jsx to tsx (?)
+
 */
 
 const Table = () => {
@@ -100,9 +102,9 @@ const Table = () => {
                     })}
                 </tbody>
             </table>
-            <button onClick={ () => setAddRowModalDisplayed(true) /*Why does this turn into an infinite loop if it isn't called as a function? */}>Add a row</button>
-            { addRowModalDisplayed === true && //I've come to understand that this functions as basically an if statement for html. Is that accurate?
-                <AddRowModal />
+            <button onClick={ () => setAddRowModalDisplayed(true) }>Add a row</button>
+            { addRowModalDisplayed && //I've come to understand that this functions as basically an if statement for html. Is that accurate?
+                <AddRowModal hideModal={ () => setAddRowModalDisplayed(false) } />
             }
         </div>
     )
