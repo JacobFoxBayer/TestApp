@@ -1,19 +1,13 @@
 import React, {useState, useEffect} from 'react'
 import {queries, queryProfile} from '@monsantoit/profile-client'
-import { name } from 'file-loader'
 import AddRowModal from './AddRowModal' //If using default export, no need for curly braces. If using named export, use curly braces.
+import { async } from 'regenerator-runtime'
 
 /*
 
 Left to do (off the top of my head):
 
-    * Figure out why I get an infinite loop when trying to use an onClick event (I solved this, but would like an explanation)
-
-    * Determine why the <addRowModal /> won't display even when the state variable is set
-      to true (I solved this, no need for explanation)
-
-    * Flesh out the addRowModal (if this is the route I continue to pursue. I could also rerender
-      the entire screen based upon the status of the state variable)
+    * Flesh out the addRowModal
 
     * Add a post request to the addRowModal and track the status of the request
 
@@ -27,17 +21,31 @@ const Table = () => {
 
     // placeholder posts URL -- GET to https://jsonplaceholder.typicode.com/posts
 
-    const [ pretendData, setPretendData ] = useState(null)
+    const [ data, setData ] = useState([])
     const [ addRowModalDisplayed, setAddRowModalDisplayed ] = useState(false)
 
     useEffect(() => {
         const makeCall = async () => {
             // [{ userId: number, id: number, title: string, body: string }]
-            const fetchResult = await fetch('https://jsonplaceholder.typicode.com/posts', { method: 'GET' })
+            const fetchResult = await fetch('/test/v1/graphql', { method: 'POST', headers: {'Content-Type': 'application/json',}, body: JSON.stringify({
+                query: `
+                    query GetDogData{
+                        getData{
+                        name
+                        breed
+                        age
+                        dogId
+                        }
+                    }
+                  `
+            }) 
+        })
+        console.log(fetchResult)
             if (fetchResult.ok) {
                 console.log('Get request received')
                 const jsonData = await fetchResult.json()
-                setPretendData(jsonData)
+                console.log(jsonData)
+                setData(jsonData.data.getData)
             }
             else
                 console.log('Get request failed')
@@ -47,28 +55,6 @@ const Table = () => {
 
     }, [])
 
-    const data = [
-        {
-            dogId: 12345,
-            name: 'Luna',
-            breed: 'Poodle',
-            age: 1,
-        },
-
-        {
-            dogId: 12346,
-            name: 'Stormy',
-            breed: 'Lab/Beagle',
-            age: 5,
-        },
-
-        {
-            dogId: 12347,
-            name: 'Bella',
-            breed: 'Labrador Retriever',
-            age: 7,
-        }
-    ]
 
     return (
         /*
@@ -90,7 +76,7 @@ const Table = () => {
                     <th>Age</th>
                 </thead>
                 <tbody>
-                    {data.map((val, key) => {
+                    {data.map((val) => {
                         return (
                             <tr key={val.dogId}>
                                 <td>{val.dogId}</td>

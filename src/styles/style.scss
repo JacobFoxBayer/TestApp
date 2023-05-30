@@ -7,14 +7,17 @@
   justify-content: center;
 }
 
-.obvious {
-  background-color: orange;
+.center {
+  margin: auto;
+}
+
+.formField {
+  padding-top: 1rem;
 }
 
 table {
   border: 2px solid black;
   margin: auto;
-  //width: 50rem;
 }
 
 th {

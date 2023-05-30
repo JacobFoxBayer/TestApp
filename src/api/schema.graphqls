@@ -1,16 +1,20 @@
-type Data {
-    result: String
-    now: String
+type Dog {
+  dogId: Int
+  name: String
+  age: Int
+  breed: String
 }
 
-input DataInput {
-    result: String
+input DogInput {
+  name: String
+  age: Int
+  breed: String
 }
 
 type Query {
-    getData: Data
+  getData: [Dog]
 }
 
 type Mutation {
-    changeData(input: DataInput): Data
+  changeData(input: DogInput): [Dog]
 }
