@@ -18,3 +18,7 @@ type Query {
 type Mutation {
   addDog(input: DogInput): Dog
 }
+
+type Mutation {
+  killDog(dogId: Int): Boolean
+}

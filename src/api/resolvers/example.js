@@ -38,6 +38,18 @@ module.exports = {
             }
             data.push(newDog)
             return newDog
-        }
+        },
+
+        killDog(_,{dogId}) {
+            console.log('1', dogId)
+            const pos = data.map(e => e.dogId).indexOf(dogId);
+            console.log('2', pos)
+            if(pos > -1) {
+                data.splice(pos, 1)
+                return true
+            }
+            else
+                return false
+        } 
     }
 }
