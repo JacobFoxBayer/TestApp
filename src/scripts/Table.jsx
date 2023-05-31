@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react'
 import {queries, queryProfile} from '@monsantoit/profile-client'
 import AddRowModal from './AddRowModal' //If using default export, no need for curly braces. If using named export, use curly braces.
 import { async } from 'regenerator-runtime'
-import { FaBicycle, faBicycle, FaFighterJet } from "react-icons/fa"
+import { FaTrashAlt, FaPencilAlt } from "react-icons/fa"
 
 /*
 
@@ -107,6 +107,28 @@ const Table = () => {
                 console.log('Error removing dog')     
     }
 
+    const changeDog = async (id) => {
+        const fetchResult = await fetch('/test/v1/graphql', { method: 'POST', headers: {'Content-Type': 'application/json',}, body: JSON.stringify({
+            query: `
+                mutation magicTrick($dogId: Int!) {
+                    killDog(dogId: $dogId)
+                }
+              `,
+
+              variables: {
+                dogId: id,
+              },
+            })})
+
+            console.log('Fetch result for removing dog: ', fetchResult)
+
+            if(fetchResult.ok) {
+                setData(data.filter( dogList => dogList.dogId !== id))
+            }
+            else
+                console.log('Error removing dog')     
+    }
+
 
     return (
         /*
@@ -122,17 +144,18 @@ const Table = () => {
         <div>
             <table>
                 <thead>
-                    <th></th>
-                    <th>Dog ID Number</th>
-                    <th>Name</th>
-                    <th>Breed</th>
-                    <th>Age</th>
+                    <th className='iconPadding'></th>
+                    <th className='tablePadding'>Dog ID Number</th>
+                    <th className='tablePadding'>Name</th>
+                    <th className='tablePadding'>Breed</th>
+                    <th className='tablePadding'>Age</th>
                 </thead>
                 <tbody>
                     {data.map((val) => {
                         return (
                             <tr key={val.dogId}>
-                                <FaFighterJet onClick={ () => killDog(val.dogId) } />
+                                <FaTrashAlt onClick={ () => killDog(val.dogId) } />
+                                <FaPencilAlt onClick={ () => changeDog(val)} />
                                 <td>{val.dogId}</td>
                                 <td>{val.name}</td>
                                 <td>{val.breed}</td>

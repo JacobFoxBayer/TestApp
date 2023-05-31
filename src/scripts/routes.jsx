@@ -1,4 +1,5 @@
 import React from 'react';
+import '@element/themes/bayer';
 import {Routes, Route, BrowserRouter} from 'react-router-dom';
 import Table from './Table'
 

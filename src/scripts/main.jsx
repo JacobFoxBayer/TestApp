@@ -1,4 +1,5 @@
 import React from 'react'
+import '@element/themes/bayer';
 import ReactDOM from 'react-dom'
 import navbar from '@monsantoit/phoenix-navbar'
 import Routes from './routes'
