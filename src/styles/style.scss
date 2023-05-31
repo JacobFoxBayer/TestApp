@@ -1,23 +1,10 @@
-.home {
-  padding: 20px;
-}
-
-.container {
-  display: flex;
-  justify-content: center;
-}
-
-.center {
+table {
+  border: 2px solid black;
   margin: auto;
 }
 
 .formField {
-  padding-top: 1rem;
-}
-
-table {
-  border: 2px solid black;
-  margin: auto;
+  padding: 10px;
 }
 
 .tablePadding {
@@ -28,3 +15,25 @@ table {
   padding-right: 3rem;
 }
 
+.buttonHolder {
+  width: 50%;
+  margin: auto;
+  padding-top: 2rem;
+}
+
+
+.flexBox {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+  //flex-direction: column;
+}
+
+.modal {
+  background-color: solid white;
+  border: 1px solid black;
+  width: 40%;
+  margin: auto;
+  height: 18rem;
+}

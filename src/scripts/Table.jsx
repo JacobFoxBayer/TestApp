@@ -4,6 +4,7 @@ import AddRowModal from './AddRowModal' //If using default export, no need for c
 import ChangeDogModal from './ChangeDogModal'
 import { async } from 'regenerator-runtime'
 import { FaTrashAlt, FaPencilAlt } from "react-icons/fa"
+import { Button } from '@element/react-components'
 
 /*
 
@@ -131,7 +132,7 @@ const Table = () => {
                 dogId: dogInfo.dogId,
               },
             })})
-            console.log('Updating dog fetchResult: ', fetchResult)
+            console.log('changeDog fetchResult: ', fetchResult)
             if(fetchResult.ok) {
                 const resultJson = await fetchResult.json()
                 const arrayPos = data.map(e => e.dogId).indexOf(resultJson.data.changeDog.dogId)
@@ -141,14 +142,6 @@ const Table = () => {
             else {
                 console.log('Error updating data')
             }    
-
-            return (
-                <ChangeDogModal 
-                    hideModal={ () => setAddRowModalDisplayed(false) } 
-                    modifyDog={ (dogInfo) => changeDog(dogInfo)} 
-                    dogInfo={ dogInfo } 
-                />
-            )
     }
 
 
@@ -176,8 +169,8 @@ const Table = () => {
                     {data.map((val) => {
                         return (
                             <tr key={val.dogId}>
-                                <FaTrashAlt onClick={ () => killDog(val.dogId) } />
-                                <FaPencilAlt onClick={ () => {
+                                <FaTrashAlt color='#D2122E' onClick={ () => killDog(val.dogId) } />
+                                <FaPencilAlt color='#318CE7' onClick={ () => {
                                     setChangeModalData(val) 
                                     setAddRowModalDisplayed(false)
                                     setChangeModalDisplayed(true)   
@@ -192,14 +185,23 @@ const Table = () => {
                     })}
                 </tbody>
             </table>
-            <button onClick={ () => {
-                setChangeModalDisplayed(false) 
-                setAddRowModalDisplayed(true) 
-            }
-            }>Add a row</button>
+            <div className='buttonHolder'>
+                <Button 
+                    variant='filled' 
+                    fullWidth
+                    onClick={ () => {
+                        setChangeModalDisplayed(false) 
+                        setAddRowModalDisplayed(true) 
+                    }}>
+                    Add a row
+                </Button>
+            </div>
 
             { addRowModalDisplayed &&
-                <AddRowModal hideModal={ () => setAddRowModalDisplayed(false) } newDog={ (newData) => addDog(newData) } /> 
+                <AddRowModal 
+                    hideModal={ () => setAddRowModalDisplayed(false) } 
+                    newDog={ (newData) => addDog(newData) } 
+                /> 
             }
             
             { changeModalDisplayed &&
