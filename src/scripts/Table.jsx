@@ -1,6 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import {queries, queryProfile} from '@monsantoit/profile-client'
 import AddRowModal from './AddRowModal' //If using default export, no need for curly braces. If using named export, use curly braces.
+import ChangeDogModal from './ChangeDogModal'
 import { async } from 'regenerator-runtime'
 import { FaTrashAlt, FaPencilAlt } from "react-icons/fa"
 
@@ -24,6 +25,8 @@ const Table = () => {
 
     const [ data, setData ] = useState([])
     const [ addRowModalDisplayed, setAddRowModalDisplayed ] = useState(false)
+    const [ changeModalDisplayed, setChangeModalDisplayed ] = useState(false)
+    const [ changeModalData, setChangeModalData ] = useState({})
 
     useEffect(() => {
         const makeCall = async () => {
@@ -107,26 +110,45 @@ const Table = () => {
                 console.log('Error removing dog')     
     }
 
-    const changeDog = async (id) => {
+    const changeDog = async (dogInfo) => {
+        console.log('dogInfo: ', dogInfo)
         const fetchResult = await fetch('/test/v1/graphql', { method: 'POST', headers: {'Content-Type': 'application/json',}, body: JSON.stringify({
             query: `
-                mutation magicTrick($dogId: Int!) {
-                    killDog(dogId: $dogId)
+                mutation magicTrick($name: String!, $breed: String!, $age: Int!, $dogId: Int!) {
+                changeDog(newData: {name: $name, breed: $breed, age: $age, dogId: $dogId}) {
+                    dogId
+                    name
+                    breed
+                    age
+                  }
                 }
               `,
 
               variables: {
-                dogId: id,
+                name: dogInfo.name,
+                age: dogInfo.age,
+                breed: dogInfo.breed,
+                dogId: dogInfo.dogId,
               },
             })})
-
-            console.log('Fetch result for removing dog: ', fetchResult)
-
+            console.log('Updating dog fetchResult: ', fetchResult)
             if(fetchResult.ok) {
-                setData(data.filter( dogList => dogList.dogId !== id))
+                const resultJson = await fetchResult.json()
+                const arrayPos = data.map(e => e.dogId).indexOf(resultJson.data.changeDog.dogId)
+                data.splice(arrayPos, 1, resultJson.data.changeDog)
+                setChangeModalDisplayed(false)
             }
-            else
-                console.log('Error removing dog')     
+            else {
+                console.log('Error updating data')
+            }    
+
+            return (
+                <ChangeDogModal 
+                    hideModal={ () => setAddRowModalDisplayed(false) } 
+                    modifyDog={ (dogInfo) => changeDog(dogInfo)} 
+                    dogInfo={ dogInfo } 
+                />
+            )
     }
 
 
@@ -155,7 +177,12 @@ const Table = () => {
                         return (
                             <tr key={val.dogId}>
                                 <FaTrashAlt onClick={ () => killDog(val.dogId) } />
-                                <FaPencilAlt onClick={ () => changeDog(val)} />
+                                <FaPencilAlt onClick={ () => {
+                                    setChangeModalData(val) 
+                                    setAddRowModalDisplayed(false)
+                                    setChangeModalDisplayed(true)   
+                                } }
+                                />
                                 <td>{val.dogId}</td>
                                 <td>{val.name}</td>
                                 <td>{val.breed}</td>
@@ -165,9 +192,22 @@ const Table = () => {
                     })}
                 </tbody>
             </table>
-            <button onClick={ () => setAddRowModalDisplayed(true) }>Add a row</button>
+            <button onClick={ () => {
+                setChangeModalDisplayed(false) 
+                setAddRowModalDisplayed(true) 
+            }
+            }>Add a row</button>
+
             { addRowModalDisplayed &&
-                <AddRowModal hideModal={ () => setAddRowModalDisplayed(false) } newDog={ (newData) => addDog(newData) } />
+                <AddRowModal hideModal={ () => setAddRowModalDisplayed(false) } newDog={ (newData) => addDog(newData) } /> 
+            }
+            
+            { changeModalDisplayed &&
+                <ChangeDogModal 
+                    hideModal={ () => setChangeModalDisplayed(false) } 
+                    modifyDog={ (modifiedData) => changeDog(modifiedData)} 
+                    dogInfo={ changeModalData } 
+                />
             }
         </div>
     )

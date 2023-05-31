@@ -53,7 +53,10 @@ module.exports = {
         } ,
 
         changeDog(_,{newData}) {
-            
+            console.log('New data: ', newData)
+            const arrayPos = data.map(e => e.dogId).indexOf(newData.dogId);
+            data.splice(arrayPos, 1, newData)
+            return newData
         }
     }
 }

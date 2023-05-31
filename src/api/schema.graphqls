@@ -5,10 +5,17 @@ type Dog {
   breed: String
 }
 
-input DogInput {
+input NewDogInput {
   name: String
   age: Int
   breed: String
+}
+
+input ExistingDogInput {
+  name: String
+  age: Int
+  breed: String
+  dogId: Int
 }
 
 type Query {
@@ -16,7 +23,7 @@ type Query {
 }
 
 type Mutation {
-  addDog(input: DogInput): Dog
+  addDog(input: NewDogInput): Dog
 }
 
 type Mutation {
@@ -24,5 +31,5 @@ type Mutation {
 }
 
 type Mutation {
-  changeDog(newData: dog): Dog
+  changeDog(newData: ExistingDogInput): Dog
 }
