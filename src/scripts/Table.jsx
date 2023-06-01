@@ -6,6 +6,7 @@ import { async } from 'regenerator-runtime'
 import { FaTrashAlt, FaPencilAlt } from "react-icons/fa"
 import { Button } from '@element/react-components'
 import { addDogNetworkRequest } from './Network'
+import DogFormModal from './DogFormModal'
 
 /*
 
@@ -28,13 +29,9 @@ Thoughts:
 */
 
 const Table = () => {
-
-    // placeholder posts URL -- GET to https://jsonplaceholder.typicode.com/posts
-
     const [ tableData, setTableData ] = useState([])
-    const [ addModalDisplayed, setAddModalDisplayed ] = useState(false)
-    const [ changeModalDisplayed, setChangeModalDisplayed ] = useState(false)
     const [ changeModalData, setChangeModalData ] = useState({})
+    const [ editing, setEditing ] = useState(null)
 
     useEffect(() => {
         const getTableData = async () => {
@@ -71,7 +68,7 @@ const Table = () => {
             if(fetchResult.ok) {
                 const resultJson = await fetchResult.json()
                 setTableData([...tableData, resultJson.data.addDog])
-                setAddModalDisplayed(false)
+                setEditing(null)
             }
             else {
                 console.log('Error fetching new dog')
@@ -127,7 +124,7 @@ const Table = () => {
                 const arrayPos = tableData.map(e => e.dogId).indexOf(resultJson.data.changeDog.dogId)
                 if(arrayPos > -1) {
                     tableData.splice(arrayPos, 1, resultJson.data.changeDog)
-                    setChangeModalDisplayed(false)
+                    setEditing(null)
                     console.log('Dog info changed')
                 }
                 else
@@ -166,8 +163,7 @@ const Table = () => {
                                 <FaTrashAlt color='#D2122E' onClick={ () => killDog(val.dogId) } />
                                 <FaPencilAlt color='#318CE7' onClick={ () => {
                                     setChangeModalData(val) 
-                                    setAddModalDisplayed(false)
-                                    setChangeModalDisplayed(true)   
+                                    setEditing('editing')  
                                 } }
                                 />
                                 <td>{val.dogId}</td>
@@ -184,31 +180,20 @@ const Table = () => {
                     variant='filled' 
                     fullWidth
                     onClick={ () => {
-                        setChangeModalDisplayed(false) 
-                        setAddModalDisplayed(true) 
+                        setEditing('creating')
                     }}
                     label='Add a row'
                     />
             </div>
 
-            {/* addModalDisplayed ? <RowModal hideModal newDog /> : changeModalDisplayed ? 
-
-            */}
-
-            { addModalDisplayed &&
-                <AddRowModal 
-                    hideModal={ () => setAddModalDisplayed(false) } 
-                    newDog={ (newData) => addDog(newData) } 
-                /> 
-            }
-            
-            { changeModalDisplayed &&
-                <ChangeDogModal 
-                    hideModal={ () => setChangeModalDisplayed(false) } 
-                    modifyDog={ (modifiedData) => changeDog(modifiedData)} 
-                    dogInfo={ changeModalData } 
+            { editing !== null &&
+                <DogFormModal 
+                    hideModal={ () => setEditing(null) } 
+                    alterDog={ editing === 'editing' ? (modifiedData) => changeDog(modifiedData) : (newData) => addDog(newData) }
+                    dogInfo= { editing === 'editing' ? changeModalData : {name: "", breed: "", age: ""} } 
                 />
             }
+            
         </div>
     )
 }
