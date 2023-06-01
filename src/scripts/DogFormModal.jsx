@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { Button } from '@element/react-components'
 
-const DogFormModal = ({ dogInfo, alterDog, hideModal }) => {
+const DogFormModal = ({ dogInfo, alterDog, hideModal, modalName }) => {
     const [dogData, setDogData] = useState(dogInfo)
 
     return (
         <div className='modal'>
             <div className='flexBox'>
-                <h2>Add a Dog</h2>
+                <h2>{modalName}</h2>
                 <div className='formField'>
                     <label>Name: </label>
                     <input type="text" name='name' value={ dogData.name } onChange={ (e) => setDogData({...dogData, name: e.target.value}) }/>

@@ -1,7 +1,5 @@
 import React, {useState, useEffect} from 'react'
 import {queries, queryProfile} from '@monsantoit/profile-client'
-import AddRowModal from './AddRowModal' //If using default export, no need for curly braces. If using named export, use curly braces.
-import ChangeDogModal from './ChangeDogModal'
 import { async } from 'regenerator-runtime'
 import { FaTrashAlt, FaPencilAlt } from "react-icons/fa"
 import { Button } from '@element/react-components'
@@ -191,6 +189,7 @@ const Table = () => {
                     hideModal={ () => setEditing(null) } 
                     alterDog={ editing === 'editing' ? (modifiedData) => changeDog(modifiedData) : (newData) => addDog(newData) }
                     dogInfo= { editing === 'editing' ? changeModalData : {name: "", breed: "", age: ""} } 
+                    modalName={ editing === 'editing' ? 'Modify a Dog' : 'Add a Dog'}
                 />
             }
             
