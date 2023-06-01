@@ -27,7 +27,13 @@ table {
   gap: 10px;
   flex-wrap: wrap;
   justify-content: center;
-  //flex-direction: column;
+  flex-direction: column;
+}
+
+.flexBox .flexItem {
+  flex: 1;
+  display: contents;
+  align-self: center;
 }
 
 .modal {
@@ -35,5 +41,5 @@ table {
   border: 1px solid black;
   width: 40%;
   margin: auto;
-  height: 18rem;
+  height: 70%;
 }
