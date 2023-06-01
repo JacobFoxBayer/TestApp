@@ -15,10 +15,7 @@ Thoughts:
       there are now two dogs with an id of 3. Glitchy things
       happen when you try to delete one of them.
 
-    * Having a component for each modal is unnecessary.
-      They could be consolidated.
-
-    * The variable names used can be confusing. If
+    * The variable names used can be ambiguous. If
       anyone else tried to read this, they would have a 
       hard time understanding what is going on.
 
@@ -43,66 +40,53 @@ const Table = () => {
             else
                 console.log('Get request failed')
         }
-
         getTableData()
-
     }, [])
 
     const addDog = async (newData) => {
         const fetchResult = await addDogNetworkRequest(newData)
-            console.log('Fetch result for adding a dog: ', fetchResult)
-            if(fetchResult.ok) {
-                const resultJson = await fetchResult.json()
-                setTableData([...tableData, resultJson.data.addDog])
-                setEditing(null)
-            }
-            else {
-                console.log('Error fetching new dog')
-            }
+        console.log('Fetch result for adding a dog: ', fetchResult)
+        if(fetchResult.ok) {
+            const resultJson = await fetchResult.json()
+            setTableData([...tableData, resultJson.data.addDog])
+            setEditing(null)
+        }
+        else {
+            console.log('Error fetching new dog')
+        }
     }
 
     const killDog = async (id) => {
         const fetchResult = await killDogNetworkRequest(id)
-            console.log('Fetch result for removing dog: ', fetchResult)
-            if(fetchResult.ok) {
-                console.log('Dog removed')
-                setTableData(tableData.filter( dogList => dogList.dogId !== id))
-            }
-            else
-                console.log('Error removing dog')     
+        console.log('Fetch result for removing dog: ', fetchResult)
+        if(fetchResult.ok) {
+            console.log('Dog removed')
+            setTableData(tableData.filter( dogList => dogList.dogId !== id))
+        }
+        else
+            console.log('Error removing dog')     
     }
 
     const changeDog = async (dogInfo) => {
         const fetchResult = await changeDogNetworkRequest(dogInfo)
-            console.log('Fetch result for modifying a dog: ', fetchResult)
-            if(fetchResult.ok) { 
-                const resultJson = await fetchResult.json()
-                const arrayPos = tableData.map(e => e.dogId).indexOf(resultJson.data.changeDog.dogId)
-                if(arrayPos > -1) {
-                    tableData.splice(arrayPos, 1, resultJson.data.changeDog)
-                    setEditing(null)
-                    console.log('Dog info changed')
-                }
-                else
-                    console.log('Request received but failed to modify dog info')
+        console.log('Fetch result for modifying a dog: ', fetchResult)
+        if(fetchResult.ok) { 
+            const resultJson = await fetchResult.json()
+            const arrayPos = tableData.map(e => e.dogId).indexOf(resultJson.data.changeDog.dogId)
+            if(arrayPos > -1) {
+                tableData.splice(arrayPos, 1, resultJson.data.changeDog)
+                setEditing(null)
+                console.log('Dog info changed')
             }
-            else {
-                console.log('Error modifying dog info')
+            else
+                console.log('Request received but failed to modify dog info')
+        }
+        else {
+            console.log('Error modifying dog info')
             }    
     }
 
-
     return (
-        /*
-            I looked at the structure of data-q for a long time, trying to 
-            figure out how the table is rendered so that I could copy the structure.
-            Based upon that and my conversations with Matt and Kyle, my understanding is that
-            each row is treated as an entity and can be broken up further into individual
-            cells. I thought about trying to mimic it and break up my data similarly,
-            but that seemed overly ambitious for such a small project.
-
-            For the sake of simplicity, I used html elements to construct my table instead.
-        */
         <div>
             <table>
                 <thead>
