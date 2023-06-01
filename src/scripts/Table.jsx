@@ -3,7 +3,7 @@ import {queries, queryProfile} from '@monsantoit/profile-client'
 import { async } from 'regenerator-runtime'
 import { FaTrashAlt, FaPencilAlt } from "react-icons/fa"
 import { Button } from '@element/react-components'
-import { addDogNetworkRequest } from './Network'
+import { addDogNetworkRequest, changeDogNetworkRequest, getTableDataNetworkRequest, killDogNetworkRequest } from './Network'
 import DogFormModal from './DogFormModal'
 
 /*
@@ -33,20 +33,8 @@ const Table = () => {
 
     useEffect(() => {
         const getTableData = async () => {
-            const fetchResult = await fetch('/test/v1/graphql', { method: 'POST', headers: {'Content-Type': 'application/json',}, body: JSON.stringify({
-                query: `
-                    query GetDogData{
-                        getData{
-                        name
-                        breed
-                        age
-                        dogId
-                        }
-                    }
-                  `
-            }) 
-        })
-        console.log('Fetch result for getting initial dogs: ', fetchResult)
+            const fetchResult = await getTableDataNetworkRequest()
+            console.log('Fetch result for getting initial dogs: ', fetchResult)
             if (fetchResult.ok) {
                 console.log('Get request received')
                 const jsonData = await fetchResult.json()
@@ -74,20 +62,8 @@ const Table = () => {
     }
 
     const killDog = async (id) => {
-        const fetchResult = await fetch('/test/v1/graphql', { method: 'POST', headers: {'Content-Type': 'application/json',}, body: JSON.stringify({
-            query: `
-                mutation hastaLaVista($dogId: Int!) {
-                    killDog(dogId: $dogId)
-                }
-              `,
-
-              variables: {
-                dogId: id,
-              },
-            })})
-
+        const fetchResult = await killDogNetworkRequest(id)
             console.log('Fetch result for removing dog: ', fetchResult)
-
             if(fetchResult.ok) {
                 console.log('Dog removed')
                 setTableData(tableData.filter( dogList => dogList.dogId !== id))
@@ -97,25 +73,7 @@ const Table = () => {
     }
 
     const changeDog = async (dogInfo) => {
-        const fetchResult = await fetch('/test/v1/graphql', { method: 'POST', headers: {'Content-Type': 'application/json',}, body: JSON.stringify({
-            query: `
-                mutation magicTrick($name: String!, $breed: String!, $age: Int!, $dogId: Int!) {
-                changeDog(newData: {name: $name, breed: $breed, age: $age, dogId: $dogId}) {
-                    dogId
-                    name
-                    breed
-                    age
-                  }
-                }
-              `,
-
-              variables: {
-                name: dogInfo.name,
-                age: dogInfo.age,
-                breed: dogInfo.breed,
-                dogId: dogInfo.dogId,
-              },
-            })})
+        const fetchResult = await changeDogNetworkRequest(dogInfo)
             console.log('Fetch result for modifying a dog: ', fetchResult)
             if(fetchResult.ok) { 
                 const resultJson = await fetchResult.json()
