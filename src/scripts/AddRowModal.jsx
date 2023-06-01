@@ -15,15 +15,15 @@ const AddRowModal = (props) => {
                 <h2>Add a Dog</h2>
                 <div className='formField'>
                     <label>Name: </label>
-                    <input type="text" name='name' value={ newDogData.name || ''} onChange={ (e) => setNewDogData({...newDogData, name: e.target.value}) }/>
+                    <input type="text" name='name' value={ newDogData.name } onChange={ (e) => setNewDogData({...newDogData, name: e.target.value}) }/>
                 </div>
                 <div className='formField'>
                     <label>Breed: </label>
-                    <input type="text" name='breed' value={ newDogData.breed || ''} onChange={ (e) => setNewDogData({...newDogData, breed: e.target.value}) }/>
+                    <input type="text" name='breed' value={ newDogData.breed } onChange={ (e) => setNewDogData({...newDogData, breed: e.target.value}) }/>
                 </div>
                 <div className='formField'>
                     <label>Age: </label>
-                    <input type="text" name='age' value={ newDogData.age || ''} onChange={ (e) => setNewDogData({...newDogData, age: Number(e.target.value)}) }/>
+                    <input type="text" name='age' value={ newDogData.age } onChange={ (e) => setNewDogData({...newDogData, age: Number(e.target.value)}) }/>
                 </div>
             </div>
                 <div className='formField flexBox'>

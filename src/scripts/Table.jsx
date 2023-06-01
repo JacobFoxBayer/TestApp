@@ -5,6 +5,7 @@ import ChangeDogModal from './ChangeDogModal'
 import { async } from 'regenerator-runtime'
 import { FaTrashAlt, FaPencilAlt } from "react-icons/fa"
 import { Button } from '@element/react-components'
+import { addDogNetworkRequest } from './Network'
 
 /*
 
@@ -18,7 +19,7 @@ Thoughts:
     * Having a component for each modal is unnecessary.
       They could be consolidated.
 
-    * The variable names used are can be confusing. If
+    * The variable names used can be confusing. If
       anyone else tried to read this, they would have a 
       hard time understanding what is going on.
 
@@ -65,24 +66,7 @@ const Table = () => {
     }, [])
 
     const addDog = async (newData) => {
-        const fetchResult = await fetch('/test/v1/graphql', { method: 'POST', headers: {'Content-Type': 'application/json',}, body: JSON.stringify({
-            query: `
-                mutation muchacho($name: String!, $breed: String!, $age: Int!) {
-                addDog(input: {name: $name, breed: $breed, age: $age}) {
-                    dogId
-                    name
-                    breed
-                    age
-                  }
-                }
-              `,
-
-              variables: {
-                name: newData.name,
-                age: newData.age,
-                breed: newData.breed,
-              },
-            })})
+        const fetchResult = await addDogNetworkRequest(newData)
             console.log('Fetch result for adding a dog: ', fetchResult)
             if(fetchResult.ok) {
                 const resultJson = await fetchResult.json()
